@@ -1,7 +1,8 @@
 package com.pluralsight;
 
-import java.io.File;
+import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -39,6 +40,9 @@ public class FinancialTracker {
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
+        for(Transaction x : transactions){
+            System.out.println(x.toString());
+        }
 
         while (running) {
             System.out.println("Welcome to TransactionApp");
@@ -75,6 +79,27 @@ public class FinancialTracker {
         //       parse the five fields, build a Transaction object,
         //       and add it to the transactions list.
 
+        try(BufferedReader reader = new BufferedReader(new FileReader(fileName))){
+            String input;
+            while((input = reader.readLine()) != null){
+                String[] token = input.split("\\|");
+                LocalDate date = LocalDate.parse(token[0], DATE_FMT);
+                LocalTime time = LocalTime.parse(token[1], TIME_FMT);
+                String description = token[2];
+                String vendor = token[3];
+                double amount = Double.parseDouble(token[4]);
+                transactions.add(new Transaction(date, time, description, vendor, amount));
+            }
+        }
+        catch(IOException ex){
+            System.err.println("File does not exist");
+            try{
+                BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+                System.out.println("File created since there is no file existing");
+            } catch (IOException e) {
+                System.err.println("Error creating file");
+            }
+        }
     }
 
     /* ------------------------------------------------------------------
