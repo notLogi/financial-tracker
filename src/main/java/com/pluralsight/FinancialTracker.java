@@ -120,7 +120,10 @@ public class FinancialTracker {
             System.out.println("Amount: ");
             double amount = scanner.nextDouble();
             scanner.nextLine();
-            if(amount <= 0) System.out.println("The amount you entered is negative");
+            if(amount <= 0) {
+                System.out.println("The amount you entered is negative");
+                return;
+            }
 
             String[] dateTimeSplit = dateAndTime.split(" ");
             LocalDate date = LocalDate.parse(dateTimeSplit[0], DATE_FMT);
@@ -132,12 +135,10 @@ public class FinancialTracker {
             /*for(Transaction x : transactions){
                 System.out.println(x.toString());
             }*/
-
         }
         catch (Exception e) {
             System.err.println("Your date input is not correct or out of bound.");
         }
-
     }
 
     /**
@@ -146,7 +147,33 @@ public class FinancialTracker {
      * then converted to a negative amount before storing.
      */
     private static void addPayment(Scanner scanner) {
-        // TODO
+        try{
+            System.out.println("Enter your information: \n");
+            System.out.println("Date and time(yyyy-MM-dd HH:mm:ss format): ");
+            String dateAndTime = scanner.nextLine();
+            System.out.println("Description: ");
+            String description = scanner.nextLine();
+            System.out.println("Vendor: ");
+            String vendor = scanner.nextLine();
+            System.out.println("Amount(Positive number): ");
+            double amount = scanner.nextDouble();
+            scanner.nextLine();
+            if(amount <= 0) System.out.println("The amount you entered is negative");
+
+            String[] dateTimeSplit = dateAndTime.split(" ");
+            LocalDate date = LocalDate.parse(dateTimeSplit[0], DATE_FMT);
+            LocalTime time = LocalTime.parse(dateTimeSplit[1], TIME_FMT);
+
+
+            transactions.add(new Transaction(date, time, description, vendor, -(amount)));
+            System.out.println("Payment successful!");
+            for(Transaction x : transactions){
+                System.out.println(x.toString());
+            }
+        }
+        catch (Exception e) {
+            System.err.println("Your date input is not correct or out of bound.");
+        }
     }
 
     /* ------------------------------------------------------------------
