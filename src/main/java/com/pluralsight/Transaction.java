@@ -51,12 +51,12 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaction{" +
-                "date=" + date +
-                ", time=" + time +
-                ", description='" + description + '\'' +
-                ", vendor='" + vendor + '\'' +
-                ", amount=" + amount +
-                '}';
+        return "Transaction: {"+
+                "date: " + date +
+                ", time: " + time +
+                ", description: " + description + '\'' +
+                ", vendor: " + vendor + '\'' +
+                ", amount: " + String.format("%.2f", amount) +
+                '}' + "\n";
     }
 }
