@@ -252,10 +252,10 @@ public class FinancialTracker {
             String input = scanner.nextLine().trim();
 
             switch (input) {
-                case "1" -> {/* TODO – month-to-date report */ }
-                case "2" -> {/* TODO – previous month report */ }
-                case "3" -> {/* TODO – year-to-date report   */ }
-                case "4" -> {/* TODO – previous year report  */ }
+                case "1" -> monthToDate();
+                case "2" -> checkPreviousMonth();
+                case "3" -> yearToDate();
+                case "4" -> checkPreviousYear();
                 case "5" -> {/* TODO – prompt for vendor then report */ }
                 case "6" -> customSearch(scanner);
                 case "0" -> running = false;
@@ -264,9 +264,42 @@ public class FinancialTracker {
         }
     }
 
-    /* ------------------------------------------------------------------
-       Reporting helpers
-       ------------------------------------------------------------------ */
+    private static void monthToDate(){
+        LocalDate date = LocalDate.now();
+        for(Transaction transaction : transactions){
+            if(date.getMonthValue() == transaction.getDate().getMonthValue()){
+                System.out.println(transaction.toString());
+            }
+        }
+    }
+
+    private static void checkPreviousMonth(){
+        LocalDate date = LocalDate.now();
+        for(Transaction transaction : transactions){
+            if(date.getMonthValue() - 1 == transaction.getDate().getMonthValue() && date.getYear() == transaction.getDate().getYear()){
+                System.out.println(transaction.toString());
+            }
+        }
+    }
+
+    private static void yearToDate(){
+        LocalDate date = LocalDate.now();
+        for(Transaction transaction : transactions){
+            if(date.getYear() == transaction.getDate().getYear()){
+                System.out.println(transaction.toString());
+            }
+        }
+    }
+
+    private static void checkPreviousYear(){
+        LocalDate date = LocalDate.now();
+        for(Transaction transaction : transactions){
+            if(date.getYear() - 1 == transaction.getDate().getYear()){
+                System.out.println(transaction.toString());
+            }
+        }
+    }
+
     private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
         // TODO – iterate transactions, print those within the range
     }
