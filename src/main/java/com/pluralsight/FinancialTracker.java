@@ -40,9 +40,6 @@ public class FinancialTracker {
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-        for(Transaction x : transactions){
-            System.out.println(x.toString());
-        }
 
         while (running) {
             System.out.println("Welcome to TransactionApp");
@@ -75,11 +72,8 @@ public class FinancialTracker {
      * • Each line looks like: date|time|description|vendor|amount
      */
     public static void loadTransactions(String fileName) {
-        // TODO: create file if it does not exist, then read each line,
-        //       parse the five fields, build a Transaction object,
-        //       and add it to the transactions list.
-
-        try(BufferedReader reader = new BufferedReader(new FileReader(fileName))){
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
             String input;
             while((input = reader.readLine()) != null){
                 String[] token = input.split("\\|");
@@ -90,12 +84,14 @@ public class FinancialTracker {
                 double amount = Double.parseDouble(token[4]);
                 transactions.add(new Transaction(date, time, description, vendor, amount));
             }
+            reader.close();
         }
         catch(IOException ex){
             System.err.println("File does not exist");
             try{
                 BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-                System.out.println("File created since there is no file existing");
+                System.out.println("File created since there is no file existing\n\n");
+                writer.close();
             } catch (IOException e) {
                 System.err.println("Error creating file");
             }
@@ -113,7 +109,35 @@ public class FinancialTracker {
      * Store the amount as-is (positive) and append to the file.
      */
     private static void addDeposit(Scanner scanner) {
-        // TODO
+        try{
+            System.out.println("Enter your information: \n");
+            System.out.println("Date and time(yyyy-MM-dd HH:mm:ss format): ");
+            String dateAndTime = scanner.nextLine();
+            System.out.println("Description: ");
+            String description = scanner.nextLine();
+            System.out.println("Vendor: ");
+            String vendor = scanner.nextLine();
+            System.out.println("Amount: ");
+            double amount = scanner.nextDouble();
+            scanner.nextLine();
+            if(amount <= 0) System.out.println("The amount you entered is negative");
+
+            String[] dateTimeSplit = dateAndTime.split(" ");
+            LocalDate date = LocalDate.parse(dateTimeSplit[0], DATE_FMT);
+            LocalTime time = LocalTime.parse(dateTimeSplit[1], TIME_FMT);
+
+
+            transactions.add(new Transaction(date, time, description, vendor, amount));
+            System.out.println("Deposit successful!");
+            /*for(Transaction x : transactions){
+                System.out.println(x.toString());
+            }*/
+
+        }
+        catch (Exception e) {
+            System.err.println("Your date input is not correct or out of bound.");
+        }
+
     }
 
     /**
