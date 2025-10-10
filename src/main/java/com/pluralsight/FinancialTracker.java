@@ -1,6 +1,7 @@
 package com.pluralsight;
 
 import java.io.*;
+import java.nio.Buffer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -110,6 +111,7 @@ public class FinancialTracker {
      */
     private static void addDeposit(Scanner scanner) {
         try{
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
             System.out.println("Enter your information: \n");
             System.out.println("Date and time(yyyy-MM-dd HH:mm:ss format): ");
             String dateAndTime = scanner.nextLine();
@@ -131,10 +133,13 @@ public class FinancialTracker {
 
 
             transactions.add(new Transaction(date, time, description, vendor, amount));
+            writer.write(date +  "|" +  time + "|" + description + "|" +  vendor + "|" + amount + "\n");
             System.out.println("Deposit successful!");
+            writer.close();
             /*for(Transaction x : transactions){
                 System.out.println(x.toString());
             }*/
+
         }
         catch (Exception e) {
             System.err.println("Your date input is not correct or out of bound.");
@@ -148,6 +153,7 @@ public class FinancialTracker {
      */
     private static void addPayment(Scanner scanner) {
         try{
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
             System.out.println("Enter your information: \n");
             System.out.println("Date and time(yyyy-MM-dd HH:mm:ss format): ");
             String dateAndTime = scanner.nextLine();
@@ -167,9 +173,8 @@ public class FinancialTracker {
 
             transactions.add(new Transaction(date, time, description, vendor, -(amount)));
             System.out.println("Payment successful!");
-            for(Transaction x : transactions){
-                System.out.println(x.toString());
-            }
+            writer.write(date +  "|" +  time + "|" + description + "|" +  vendor + "|" + amount + "\n");
+            writer.close();
         }
         catch (Exception e) {
             System.err.println("Your date input is not correct or out of bound.");
@@ -206,11 +211,27 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
-    private static void displayLedger() { /* TODO – print all transactions in column format */ }
+    private static void displayLedger() {
+        for(Transaction transaction : transactions){
+            System.out.println(transaction.toString());
+        }
+    }
 
-    private static void displayDeposits() { /* TODO – only amount > 0               */ }
+    private static void displayDeposits() {
+        for(Transaction transaction : transactions){
+            if(transaction.getAmount() > 0){
+                System.out.println(transaction.toString());
+            }
+        }
+    }
 
-    private static void displayPayments() { /* TODO – only amount < 0               */ }
+    private static void displayPayments() {
+        for(Transaction transaction : transactions){
+            if(transaction.getAmount() < 0){
+                System.out.println(transaction.toString());
+            }
+        }
+    }
 
     /* ------------------------------------------------------------------
        Reports menu
