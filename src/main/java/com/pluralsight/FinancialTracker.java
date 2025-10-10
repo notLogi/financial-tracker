@@ -256,7 +256,7 @@ public class FinancialTracker {
                 case "2" -> checkPreviousMonth();
                 case "3" -> yearToDate();
                 case "4" -> checkPreviousYear();
-                case "5" -> {/* TODO – prompt for vendor then report */ }
+                case "5" -> checkVendorTrans(scanner);
                 case "6" -> customSearch(scanner);
                 case "0" -> running = false;
                 default -> System.out.println("Invalid option");
@@ -295,6 +295,16 @@ public class FinancialTracker {
         LocalDate date = LocalDate.now();
         for(Transaction transaction : transactions){
             if(date.getYear() - 1 == transaction.getDate().getYear()){
+                System.out.println(transaction.toString());
+            }
+        }
+    }
+
+    private static void checkVendorTrans(Scanner scanner){
+        System.out.println("Enter the vendor name: ");
+        String vendor = scanner.nextLine();
+        for(Transaction transaction : transactions){
+            if(vendor.equalsIgnoreCase(transaction.getVendor())){
                 System.out.println(transaction.toString());
             }
         }
