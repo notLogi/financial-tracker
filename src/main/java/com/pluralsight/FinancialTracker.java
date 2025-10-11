@@ -125,7 +125,7 @@ public class FinancialTracker {
             }
 
             String[] dateTimeSplit = dateAndTime.split(" ");
-            LocalDate date = LocalDate.parse(dateTimeSplit[0], DATE_FMT);
+            LocalDate date = parseDate(dateTimeSplit[0]);
             LocalTime time = LocalTime.parse(dateTimeSplit[1], TIME_FMT);
 
 
@@ -152,7 +152,7 @@ public class FinancialTracker {
             String description = scanner.nextLine();
             System.out.println("Vendor: ");
             String vendor = scanner.nextLine();
-            System.out.println("Amount(Positive number): ");
+            System.out.println("Amount you want to pay(Positive number): ");
             double amount = scanner.nextDouble();
             scanner.nextLine();
             if(amount <= 0) System.out.println("The amount you entered is negative");
@@ -264,7 +264,7 @@ public class FinancialTracker {
         boolean found = false;
         LocalDate date = LocalDate.now();
         for(Transaction transaction : transactions){
-            if(date.getMonthValue() == transaction.getDate().getMonthValue()){
+            if(date.getMonthValue() == transaction.getDate().getMonthValue() && date.getYear() == transaction.getDate().getYear()){
                 System.out.println(transaction.toString());
                 found = true;
             }
@@ -338,8 +338,6 @@ public class FinancialTracker {
     }
 
     private static void customSearch(Scanner scanner) {
-        // TODO – prompt for any combination of date range, description,
-        //        vendor, and exact amount, then display matches
         System.out.println("Enter the action: ");
         int userInput = scanner.nextInt();
         scanner.nextLine();
@@ -352,8 +350,8 @@ public class FinancialTracker {
                     String startDate = scanner.nextLine();
                     System.out.println("Enter end date:(yyyy-MM-dd) ");
                     String endDate = scanner.nextLine();
-                    LocalDate startDateParsed = LocalDate.parse(startDate, DATE_FMT);
-                    LocalDate endDateParsed = LocalDate.parse(endDate, DATE_FMT);
+                    LocalDate startDateParsed = parseDate(startDate);
+                    LocalDate endDateParsed = LocalDate.parse(endDate);
                     filterTransactionsByDate(startDateParsed, endDateParsed);
                     break;
                 case 2:
@@ -380,13 +378,11 @@ public class FinancialTracker {
        Utility parsers (you can reuse in many places)
        ------------------------------------------------------------------ */
     private static LocalDate parseDate(String s) {
-        /* TODO – return LocalDate or null */
-        return null;
-    }
-
-    private static Double parseDouble(String s) {
-        /* TODO – return Double   or null */
-
-        return null;
+        try{
+            return LocalDate.parse(s, DATE_FMT);
+        } catch (Exception e) {
+            System.err.println("Invalid date format");
+            return null;
+        }
     }
 }
