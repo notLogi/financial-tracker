@@ -104,7 +104,7 @@ public class FinancialTracker {
             System.err.println("File does not exist");
             try(BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))){
                 writer.flush();
-                System.out.println("File created since there is no file existing\n\n");
+                System.out.println("File created since there is no file existing.\n\n");
             } catch (IOException e) {
                 System.err.println("Error creating file");
             }
