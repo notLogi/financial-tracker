@@ -54,8 +54,8 @@ public class Transaction {
         return "Transaction: {"+
                 "date: " + date +
                 ", time: " + time +
-                ", description: " + description + '\'' +
-                ", vendor: " + vendor + '\'' +
+                ", description: " + description  +
+                ", vendor: " + vendor  +
                 ", amount: " + String.format("%.2f", amount) +
                 '}' + "\n";
     }
