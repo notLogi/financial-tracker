@@ -229,25 +229,11 @@ public class FinancialTracker {
     }
 
     private static void displayDeposits() {
-        boolean found = false;
-        for(Transaction transaction : transactions){
-            if(transaction.getAmount() > 0){
-                System.out.println(transaction.toString());
-                found = true;
-            }
-        }
-        if(!found) System.out.println("You have no deposits");
+        filteredTransactions("You have no deposits made.", transaction -> transaction.getAmount() > 0);
     }
 
     private static void displayPayments() {
-        boolean found = false;
-        for(Transaction transaction : transactions){
-            if(transaction.getAmount() < 0){
-                System.out.println(transaction.toString());
-                found = true;
-            }
-        }
-        if(!found) System.out.println("You are not in debt.");
+        filteredTransactions("You have no payments made.", transaction -> transaction.getAmount() < 0);
     }
 
     /* ------------------------------------------------------------------
@@ -333,21 +319,12 @@ public class FinancialTracker {
 
     }
 
-    private static void filterTransactionsByDescription(Scanner scanner) {
-
-    }
-
-    private static void filterTransactionsByAmount(Scanner scanner) {
-
-    }
-
     private static void customSearch(Scanner scanner) {
         System.out.println("Enter the action: ");
         int userInput = scanner.nextInt();
         scanner.nextLine();
         boolean didExit = false;
         System.out.println("Enter your custom search: ");
-
         System.out.println("Enter start date:(yyyy-MM-dd) ");
         String startDate = scanner.nextLine();
         System.out.println("Enter end date:(yyyy-MM-dd) ");
