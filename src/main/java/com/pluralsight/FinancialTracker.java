@@ -97,7 +97,7 @@ public class FinancialTracker {
                 LocalTime time = LocalTime.parse(token[1], TIME_FMT);
                 String description = token[2];
                 String vendor = token[3];
-                double amount = Double.parseDouble(token[4]);
+                double amount = parseDouble(token[4]);
                 transactions.add(new Transaction(date, time, description, vendor, amount));
                 sortTransactions();
             }
@@ -223,9 +223,7 @@ public class FinancialTracker {
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
     private static void displayLedger() {
-        for(Transaction transaction : transactions){
-            System.out.print(transaction.toString());
-        }
+        filteredTransactions("You have no transactions recorded.", transaction -> true);
     }
 
     private static void displayDeposits() {
@@ -311,34 +309,92 @@ public class FinancialTracker {
 
 
     //helper functions for custom search
-    private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
+    private static void filterTransactionsByDate(LocalDate start, LocalDate end, ArrayList<Transaction> filteredList) {
+        if(start == null || end == null) return;
+
+        for(Transaction transaction : transactions){
+            LocalDate date = transaction.getDate();
+            if((date.isEqual(start) || date.isAfter(start)) && (date.isEqual(end) || date.isBefore(end))){
+                filteredList.add(transaction);
+            }
+        }
+    }
+
+    private static void filterTransactionsByVendor(String vendor, ArrayList<Transaction> filteredList) {
+        if(!filteredList.isEmpty()){
+            filteredList.removeIf(transaction -> !vendor.equalsIgnoreCase(transaction.getVendor()));
+            return;
+        }
+        for(Transaction transaction : transactions){
+            if(vendor.equalsIgnoreCase(transaction.getVendor())){
+                filteredList.add(transaction);
+            }
+        }
+    }
+
+    private static void filterTransactionsByDescription(String description, ArrayList<Transaction> filteredList) {
+        if(!filteredList.isEmpty()){
+            filteredList.removeIf(transaction -> !description.equalsIgnoreCase(transaction.getDescription()));
+            return;
+        }
+        for(Transaction transaction : transactions){
+            if(description.equalsIgnoreCase(transaction.getDescription())){
+                filteredList.add(transaction);
+            }
+        }
+    }
+
+    private static void filterTransactionsByAmount(String amount, ArrayList<Transaction> filteredList){
+        double convertedAmount = parseDouble(amount);
+        if(!filteredList.isEmpty()){
+            filteredList.removeIf(transaction -> convertedAmount != transaction.getAmount());
+            return;
+        }
+        for(Transaction transaction : transactions){
+            if(convertedAmount == transaction.getAmount()){
+                filteredList.add(transaction);
+            }
+        }
 
     }
 
-    private static void filterTransactionsByVendor(String vendor) {
 
-    }
 
     private static void customSearch(Scanner scanner) {
-        System.out.println("Enter the action: ");
-        int userInput = scanner.nextInt();
-        scanner.nextLine();
+        ArrayList<Transaction> filteredList = new ArrayList<>();
         boolean didExit = false;
         System.out.println("Enter your custom search: ");
-        System.out.println("Enter start date:(yyyy-MM-dd) ");
+        System.out.println("Enter start date(yyyy-MM-dd)(Optional): ");
         String startDate = scanner.nextLine();
-        System.out.println("Enter end date:(yyyy-MM-dd) ");
+        System.out.println("Enter end date(yyyy-MM-dd)(Optional): ");
         String endDate = scanner.nextLine();
-        LocalDate startDateParsed = parseDate(startDate);
-        LocalDate endDateParsed = LocalDate.parse(endDate);
-        filterTransactionsByDate(startDateParsed, endDateParsed);
-        System.out.println("Enter description: ");
+
+        if(!startDate.isEmpty() && !endDate.isEmpty()){
+            LocalDate startDateParsed = parseDate(startDate);
+            LocalDate endDateParsed = parseDate(endDate);
+            if(startDateParsed != null || endDateParsed != null) filterTransactionsByDate(startDateParsed, endDateParsed, filteredList);
+        }
+
+        System.out.println("Enter description(Optional): ");
         String description = scanner.nextLine();
-        System.out.println("Enter vendor: ");
+        System.out.println("Enter vendor(Optional): ");
         String vendor = scanner.nextLine();
-        System.out.println("Enter the amount: ");
-        double amount = scanner.nextDouble();
-        scanner.nextLine();
+        System.out.println("Enter the amount(Optional): ");
+        String amount = scanner.nextLine();
+        if(!description.isEmpty()){
+            filterTransactionsByDescription(description, filteredList);
+        }
+        if(!vendor.isEmpty()){
+            filterTransactionsByVendor(vendor, filteredList);
+        }
+        if(parseDouble(amount) != null){
+            filterTransactionsByAmount(amount, filteredList);
+        }
+        if(!filteredList.isEmpty()){
+            for(Transaction t : filteredList){
+                System.out.println(t.toString());
+            }
+        }
     }
 
     /* ------------------------------------------------------------------
@@ -349,6 +405,14 @@ public class FinancialTracker {
             return LocalDate.parse(s, DATE_FMT);
         } catch (Exception e) {
             System.err.println("Invalid date format");
+            return null;
+        }
+    }
+    private static Double parseDouble(String s) {
+        try{
+            return Math.round(Double.parseDouble(s) * 100.0) / 100.0;
+        }
+        catch(Exception e){
             return null;
         }
     }
