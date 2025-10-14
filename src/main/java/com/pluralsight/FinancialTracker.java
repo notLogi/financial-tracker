@@ -342,7 +342,6 @@ public class FinancialTracker {
 
     private static void customSearch(Scanner scanner) {
         ArrayList<Transaction> filteredList = new ArrayList<>();
-        boolean didExit = false;
         System.out.println("Enter your custom search: ");
         System.out.println("Enter start date(yyyy-MM-dd)(Optional): ");
         System.out.println("Type X to exit");
