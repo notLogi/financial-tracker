@@ -1,14 +1,11 @@
 package com.pluralsight;
 
 import java.io.*;
-import java.nio.Buffer;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Locale;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
@@ -30,11 +27,9 @@ public class FinancialTracker {
 
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private static final String TIME_PATTERN = "HH:mm:ss";
-    private static final String DATETIME_PATTERN = DATE_PATTERN + " " + TIME_PATTERN;
 
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern(DATE_PATTERN);
     private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern(TIME_PATTERN);
-    private static final DateTimeFormatter DATETIME_FMT = DateTimeFormatter.ofPattern(DATETIME_PATTERN);
 
     /* ------------------------------------------------------------------
        Main menu
@@ -306,12 +301,12 @@ public class FinancialTracker {
         if(!found) System.out.println(message);
     }
 
+    /* ------------------------------------------------------------------
+       custom search methods/menu
+       ------------------------------------------------------------------ */
 
-
-    //helper functions for custom search
     private static void filterTransactionsByDate(LocalDate start, LocalDate end, ArrayList<Transaction> filteredList) {
         if(start == null || end == null) return;
-
         for(Transaction transaction : transactions){
             LocalDate date = transaction.getDate();
             if((date.isEqual(start) || date.isAfter(start)) && (date.isEqual(end) || date.isBefore(end))){
@@ -321,51 +316,38 @@ public class FinancialTracker {
     }
 
     private static void filterTransactionsByVendor(String vendor, ArrayList<Transaction> filteredList) {
-        if(!filteredList.isEmpty()){
-            filteredList.removeIf(transaction -> !vendor.equalsIgnoreCase(transaction.getVendor()));
-            return;
-        }
-        for(Transaction transaction : transactions){
-            if(vendor.equalsIgnoreCase(transaction.getVendor())){
-                filteredList.add(transaction);
-            }
-        }
+        customSearchFilter(transaction -> vendor.equalsIgnoreCase(transaction.getVendor()), filteredList);
     }
 
     private static void filterTransactionsByDescription(String description, ArrayList<Transaction> filteredList) {
-        if(!filteredList.isEmpty()){
-            filteredList.removeIf(transaction -> !description.equalsIgnoreCase(transaction.getDescription()));
-            return;
-        }
-        for(Transaction transaction : transactions){
-            if(description.equalsIgnoreCase(transaction.getDescription())){
-                filteredList.add(transaction);
-            }
-        }
+        customSearchFilter(transaction -> description.equalsIgnoreCase(transaction.getDescription()), filteredList);
     }
 
     private static void filterTransactionsByAmount(String amount, ArrayList<Transaction> filteredList){
         double convertedAmount = parseDouble(amount);
+        customSearchFilter(transaction -> convertedAmount != transaction.getAmount(), filteredList);
+    }
+
+    private static void customSearchFilter(Predicate<Transaction> predicate, ArrayList<Transaction> filteredList){
         if(!filteredList.isEmpty()){
-            filteredList.removeIf(transaction -> convertedAmount != transaction.getAmount());
+            filteredList.removeIf(predicate.negate());
             return;
         }
         for(Transaction transaction : transactions){
-            if(convertedAmount == transaction.getAmount()){
+            if(predicate.test(transaction)){
                 filteredList.add(transaction);
             }
         }
-
     }
-
-
 
     private static void customSearch(Scanner scanner) {
         ArrayList<Transaction> filteredList = new ArrayList<>();
         boolean didExit = false;
         System.out.println("Enter your custom search: ");
         System.out.println("Enter start date(yyyy-MM-dd)(Optional): ");
+        System.out.println("Type X to exit");
         String startDate = scanner.nextLine();
+        if(startDate.equalsIgnoreCase("x")) return;
         System.out.println("Enter end date(yyyy-MM-dd)(Optional): ");
         String endDate = scanner.nextLine();
 
