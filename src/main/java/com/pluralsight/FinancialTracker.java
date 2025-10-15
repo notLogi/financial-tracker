@@ -90,8 +90,8 @@ public class FinancialTracker {
                 String[] token = input.split("\\|");
                 LocalDate date = LocalDate.parse(token[0], DATE_FMT);
                 LocalTime time = LocalTime.parse(token[1], TIME_FMT);
-                String description = token[2];
-                String vendor = token[3];
+                String description = capitalizeFirst(token[2]);
+                String vendor = capitalizeFirst(token[3]);
                 Double convertedAmount = parseDouble(token[4]);
                 if(convertedAmount != null){
                     transactions.add(new Transaction(date, time, description, vendor, convertedAmount));
@@ -144,7 +144,7 @@ public class FinancialTracker {
             LocalDate date = parseDate(dateTimeSplit[0]);
             LocalTime time = LocalTime.parse(dateTimeSplit[1], TIME_FMT);
 
-            transactions.add(new Transaction(date, time, description, vendor, amount));
+            transactions.add(new Transaction(date, time, capitalizeFirst(description), capitalizeFirst(vendor), amount));
             sortTransactions();
             System.out.println("Deposit successful!");
         }
@@ -180,7 +180,7 @@ public class FinancialTracker {
             LocalDate date = LocalDate.parse(dateTimeSplit[0], DATE_FMT);
             LocalTime time = LocalTime.parse(dateTimeSplit[1], TIME_FMT);
 
-            transactions.add(new Transaction(date, time, description, vendor, -(amount)));
+            transactions.add(new Transaction(date, time, capitalizeFirst(description), capitalizeFirst(vendor), -(amount)));
             sortTransactions();
             System.out.println("Payment successful!");
         }
@@ -388,6 +388,7 @@ public class FinancialTracker {
             return null;
         }
     }
+
     private static Double parseDouble(String s) {
         try {
             return Math.round(Double.parseDouble(s) * 100.0) / 100.0;
@@ -396,5 +397,10 @@ public class FinancialTracker {
             System.err.println("Invalid number");
             return null;
         }
+    }
+
+    private static String capitalizeFirst(String text){
+        if(text.isEmpty()) return text;
+        return text.substring(0, 1).toUpperCase() + text.substring(1);
     }
 }
