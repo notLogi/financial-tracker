@@ -51,7 +51,7 @@ Follow these steps to get your application running within IntelliJ IDEA:
 - IntelliJ IDEA
 
 ## Demo
-[Capstone Demo.mp4](../../../Downloads/Capstone%20Demo.mp4)
+https://github.com/user-attachments/assets/76582b37-0d14-4852-9e66-93cc27f21739
 
 
 ## An Interesting Part of My Code
