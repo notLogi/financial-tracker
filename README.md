@@ -23,9 +23,6 @@ The Financial Tracker allows you to keep track of your previous transactions and
   **Sorting**
 - Transactions stored are automatically sorted by date for convenience.
 
-##Format of the data stored:
-- All transactions are formatted in this way:
-- "yyyy-MM-dd|HH:mm:ss|description|vendor|amount"
 
 ## Setup
 
