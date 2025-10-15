@@ -48,7 +48,18 @@ Follow these steps to get your application running within IntelliJ IDEA:
 - IntelliJ IDEA
 
 ## Demo
-https://github.com/user-attachments/assets/76582b37-0d14-4852-9e66-93cc27f21739
+<img width="270" height="154" alt="image" src="https://github.com/user-attachments/assets/2af1bf41-7fa8-47f4-9283-e2410a73a4fa" />
+<img width="205" height="173" alt="image" src="https://github.com/user-attachments/assets/be531e23-fde3-4923-99ee-5c9160733e2e" />
+<img width="266" height="218" alt="image" src="https://github.com/user-attachments/assets/bfa8c333-e2d4-4297-8e83-6cba88949208" />
+<img width="891" height="280" alt="image" src="https://github.com/user-attachments/assets/bfaabf7b-6884-44c2-ac06-3f9dbf69256c" />
+<img width="249" height="214" alt="image" src="https://github.com/user-attachments/assets/698189ea-acca-42a3-8927-9fbbc76593b7" />
+<img width="199" height="167" alt="image" src="https://github.com/user-attachments/assets/f99f3b4e-2d8a-490f-ae6f-dcabe58febe2" />
+<img width="303" height="205" alt="image" src="https://github.com/user-attachments/assets/ebbc0d9b-200e-4ca1-8cbb-d388627f318b" />
+
+
+
+
+
 
 
 ## An Interesting Part of My Code
