@@ -58,6 +58,7 @@ https://github.com/user-attachments/assets/76582b37-0d14-4852-9e66-93cc27f21739
 - Double vs double, where Double is an object. Used to check if the double was a valid number.
 ## Resources
 - https://www.geeksforgeeks.org/java/java-8-predicate-with-examples/
+- https://www.bezkoder.com/java-sort-arraylist-of-objects/
 
 ## Contributors:
 - Roger Su

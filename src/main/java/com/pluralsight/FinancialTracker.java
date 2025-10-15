@@ -268,7 +268,7 @@ public class FinancialTracker {
 
     private static void monthToDate(){
         LocalDate date = LocalDate.now();
-        filteredTransactions("No transactions made this month", transaction -> date.getYear() == transaction.getDate().getYear() && date.getMonthValue() == transaction.getDate().getMonthValue());
+        filteredTransactions("No transactions made this month", transaction -> date.getYear() == transaction.getDate().getYear() && date.getMonthValue() == transaction.getDate().getMonthValue() && date.getDayOfMonth() >= transaction.getDate().getDayOfMonth());
     }
 
     private static void checkPreviousMonth(){
@@ -278,7 +278,7 @@ public class FinancialTracker {
 
     private static void yearToDate(){
         LocalDate date = LocalDate.now();
-        filteredTransactions("No transactions this year were made.", transaction -> date.getYear() == transaction.getDate().getYear());
+        filteredTransactions("No transactions this year were made.", transaction -> date.getYear() == transaction.getDate().getYear() && date.getDayOfYear() >= transaction.getDate().getDayOfYear());
     }
 
     private static void checkPreviousYear(){
@@ -308,7 +308,24 @@ public class FinancialTracker {
        ------------------------------------------------------------------ */
 
     private static void filterTransactionsByDate(LocalDate start, LocalDate end, ArrayList<Transaction> filteredList) {
-        if(start == null || end == null) return;
+        if(end == null){
+            for(Transaction transaction : transactions){
+                LocalDate date = transaction.getDate();
+                if(date.isEqual(start) || date.isAfter(start)){
+                    filteredList.add(transaction);
+                }
+            }
+            return;
+        }
+        if(start == null){
+            for(Transaction transaction : transactions){
+                LocalDate date = transaction.getDate();
+                if(date.isEqual(end) || date.isBefore(end)){
+                    filteredList.add(transaction);
+                }
+            }
+            return;
+        }
         for(Transaction transaction : transactions){
             LocalDate date = transaction.getDate();
             if((date.isEqual(start) || date.isAfter(start)) && (date.isEqual(end) || date.isBefore(end))){
@@ -332,7 +349,7 @@ public class FinancialTracker {
 
     private static void customSearchFilter(Predicate<Transaction> predicate, ArrayList<Transaction> filteredList){
         if(!filteredList.isEmpty()){
-            filteredList.removeIf(predicate.negate());
+            filteredList.removeIf(transaction -> predicate.negate().test(transaction));
             return;
         }
         for(Transaction transaction : transactions){
@@ -352,11 +369,9 @@ public class FinancialTracker {
         System.out.println("Enter end date(yyyy-MM-dd)(Optional): ");
         String endDate = scanner.nextLine().trim();
 
-        if(!startDate.isEmpty() && !endDate.isEmpty()){
-            LocalDate startDateParsed = parseDate(startDate);
-            LocalDate endDateParsed = parseDate(endDate);
-            if(startDateParsed != null || endDateParsed != null) filterTransactionsByDate(startDateParsed, endDateParsed, filteredList);
-        }
+        LocalDate startDateParsed = parseDate(startDate);
+        LocalDate endDateParsed = parseDate(endDate);
+        if(startDateParsed != null || endDateParsed != null) filterTransactionsByDate(startDateParsed, endDateParsed, filteredList);
 
         System.out.println("Enter description(Optional): ");
         String description = scanner.nextLine().trim();
@@ -384,7 +399,9 @@ public class FinancialTracker {
         try{
             return LocalDate.parse(s, DATE_FMT);
         } catch (Exception e) {
-            System.err.println("Invalid date format");
+            if(!s.isEmpty()){
+                System.err.println("Invalid date format");
+            }
             return null;
         }
     }
