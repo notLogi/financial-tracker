@@ -48,6 +48,7 @@ Follow these steps to get your application running within IntelliJ IDEA:
 ## Technologies Used
 
 - Java SDK 17
+- IntelliJ IDEA
 
 ## Demo
 
