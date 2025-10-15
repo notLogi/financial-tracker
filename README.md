@@ -3,7 +3,7 @@
 
 The Financial Tracker allows you to keep track of your previous transactions and allows the user to add deposits and payments. Transitions are stored onto a CSV file and can be filtered by dates, vendor, and the amount of money.
 
-## Features
+### Some features include:
 
 **Add Deposits and Payments**
 - Users are able to record the date of the deposit/payment, the amount deposited/paid, the vendor, and description of what it was for.
