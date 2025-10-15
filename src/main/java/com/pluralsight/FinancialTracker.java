@@ -92,8 +92,11 @@ public class FinancialTracker {
                 LocalTime time = LocalTime.parse(token[1], TIME_FMT);
                 String description = token[2];
                 String vendor = token[3];
-                double amount = parseDouble(token[4]);
-                transactions.add(new Transaction(date, time, description, vendor, amount));
+                if(parseDouble(token[4]) != null){
+                    double amount = parseDouble(token[4]);
+                    transactions.add(new Transaction(date, time, description, vendor, amount));
+                }
+
                 sortTransactions();
             }
         }
@@ -324,8 +327,10 @@ public class FinancialTracker {
     }
 
     private static void filterTransactionsByAmount(String amount, ArrayList<Transaction> filteredList){
-        double convertedAmount = parseDouble(amount);
-        customSearchFilter(transaction -> convertedAmount != transaction.getAmount(), filteredList);
+        if(parseDouble(amount) != null){
+            double convertedAmount = parseDouble(amount);
+            customSearchFilter(transaction -> convertedAmount != transaction.getAmount(), filteredList);
+        }
     }
 
     private static void customSearchFilter(Predicate<Transaction> predicate, ArrayList<Transaction> filteredList){
@@ -362,19 +367,16 @@ public class FinancialTracker {
         String vendor = scanner.nextLine();
         System.out.println("Enter the amount(Optional): ");
         String amount = scanner.nextLine();
-        if(!description.isEmpty()){
-            filterTransactionsByDescription(description, filteredList);
-        }
-        if(!vendor.isEmpty()){
-            filterTransactionsByVendor(vendor, filteredList);
-        }
-        if(parseDouble(amount) != null){
-            filterTransactionsByAmount(amount, filteredList);
-        }
+        if(!description.isEmpty()) filterTransactionsByDescription(description, filteredList);
+        if(!vendor.isEmpty()) filterTransactionsByVendor(vendor, filteredList);
+        if(!amount.isEmpty()) filterTransactionsByAmount(amount, filteredList);
         if(!filteredList.isEmpty()){
             for(Transaction t : filteredList){
                 System.out.println(t.toString());
             }
+        }
+        else{
+            System.out.println("No transactions matched your conditions");
         }
     }
 
@@ -390,10 +392,10 @@ public class FinancialTracker {
         }
     }
     private static Double parseDouble(String s) {
-        try{
+        try {
             return Math.round(Double.parseDouble(s) * 100.0) / 100.0;
         }
-        catch(Exception e){
+        catch(Exception ex){
             return null;
         }
     }

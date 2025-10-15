@@ -1,19 +1,34 @@
-# Project Title
+## Financial Tracker
 
-## Description of the Project
 
-Briefly describe what this Java console application does. Mention its purpose and who the intended users are. Explain the main functionality and what problems it aims to solve.
+The Financial Tracker allows you to keep track of your previous transactions and allows the user to add deposits and payments. Transitions are stored onto a CSV file and can be filtered by dates, vendor, and the amount of money.
 
-## User Stories
+## Features
 
-List the user stories that guided the development of your application. Format these stories as: "As a [type of user], I want [some goal] so that [some reason]."
+**Add Deposits and Payments**
+- Users are able to record the date of the deposit/payment, the amount deposited/paid, the vendor, and description of what it was for.
+- Validates the user input to ensure correct date/time formats and positive amounts of money.
 
-- As a user, I want to be able to input my data, so that the application can process it accordingly.
-- As a user, I want to receive immediate feedback, so I can understand what to do next.
+**Managing ledger**
+- Allows the user to see all reports
+- Displays transactions that are either payments or deposits.
+
+**Reports**
+- Can filter reports by the previous or this month, previous or this year, or by vendor. Can filter reports by the previous or this month, previous or this year, or by vendor.
+- Option to custom search by inputting the vendor, amount recorded, description, and the date range.
+
+**Persistent storage**
+- Transactions are stored in a CSV file.
+- Automatically creates a CSV file if you don't have a transactions file.
+  **Sorting**
+- Transactions stored are automatically sorted by date for convenience.
+
+**Format**
+- All transactions are formatted in this way:
+- "yyyy-MM-dd|HH:mm:ss|description|vendor|amount"
 
 ## Setup
 
-Instructions on how to set up and run the project using IntelliJ IDEA.
 
 ### Prerequisites
 
@@ -28,12 +43,11 @@ Follow these steps to get your application running within IntelliJ IDEA:
 2. Select "Open" and navigate to the directory where you cloned or downloaded the project.
 3. After the project opens, wait for IntelliJ to index the files and set up the project.
 4. Find the main class with the `public static void main(String[] args)` method.
-5. Right-click on the file and select 'Run 'YourMainClassName.main()'' to start the application.
+5. Right-click on the file and select 'Run 'FinancialTracker.main()'' to start the application.
 
 ## Technologies Used
 
-- Java: Mention the version you are using.
-- Any additional libraries or frameworks used in the project.
+- Java SDK 17
 
 ## Demo
 
@@ -41,28 +55,13 @@ Include screenshots or GIFs that show your application in action. Use tools like
 
 ![Application Screenshot](path/to/your/screenshot.png)
 
-## Future Work
+## An Interesting Part of My Code
 
-Outline potential future enhancements or functionalities you might consider adding:
 
-- Additional feature to be developed.
-- Improvement of current functionalities.
+- One of the interesting parts of my code is how I refactored the helper methods for the reportMenu and LedgerMenu. I looked up at how to pass a condition through the parameter and it taught me about Predicate. Predicate is a functional interface that allows this. I was able to reduce a lot of repetition with this trick.
 
 ## Resources
+- https://www.geeksforgeeks.org/java/java-8-predicate-with-examples/
 
-List resources such as tutorials, articles, or documentation that helped you during the project.
-
-- [Java Programming Tutorial](https://www.example.com)
-- [Effective Java](https://www.example.com)
-
-## Team Members
-
-- **Name 1** - Specific contributions or roles.
-- **Name 2** - Specific contributions or roles.
-
-## Thanks
-
-Express gratitude towards those who provided help, guidance, or resources:
-
-- Thank you to [Mentor's Name] for continuous support and guidance.
-- A special thanks to all teammates for their dedication and teamwork.
+## Contributors:
+- Roger Su
