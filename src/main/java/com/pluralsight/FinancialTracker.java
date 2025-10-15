@@ -127,12 +127,12 @@ public class FinancialTracker {
         try{
             System.out.println("Enter your information for a deposit: \nType \"X\" to return\n");
             System.out.println("Date and time(yyyy-MM-dd HH:mm:ss format): ");
-            String dateAndTime = scanner.nextLine();
+            String dateAndTime = scanner.nextLine().trim();
             if(dateAndTime.equalsIgnoreCase("X")) return;
             System.out.println("Description: ");
-            String description = scanner.nextLine();
+            String description = scanner.nextLine().trim();
             System.out.println("Vendor: ");
-            String vendor = scanner.nextLine();
+            String vendor = scanner.nextLine().trim();
             System.out.println("Amount: ");
             double amount = scanner.nextDouble();
             scanner.nextLine();
@@ -162,12 +162,12 @@ public class FinancialTracker {
         try{
             System.out.println("Enter your information for a payment: \nType \"X\" to return\n");
             System.out.println("Date and time(yyyy-MM-dd HH:mm:ss format): ");
-            String dateAndTime = scanner.nextLine();
+            String dateAndTime = scanner.nextLine().trim();
             if(dateAndTime.equalsIgnoreCase("X")) return;
             System.out.println("Description: ");
-            String description = scanner.nextLine();
+            String description = scanner.nextLine().trim();
             System.out.println("Vendor: ");
-            String vendor = scanner.nextLine();
+            String vendor = scanner.nextLine().trim();
             System.out.println("Amount you want to pay(Positive number): ");
             double amount = scanner.nextDouble();
             scanner.nextLine();
@@ -288,7 +288,7 @@ public class FinancialTracker {
 
     private static void checkVendorTrans(Scanner scanner){
         System.out.println("Enter the vendor name: ");
-        String vendor = scanner.nextLine();
+        String vendor = scanner.nextLine().trim();
         filteredTransactions("No vendors matched any transactions", transaction -> vendor.equalsIgnoreCase(transaction.getVendor()));
     }
 
@@ -347,10 +347,10 @@ public class FinancialTracker {
         System.out.println("Enter your custom search: ");
         System.out.println("Enter start date(yyyy-MM-dd)(Optional): ");
         System.out.println("Type X to exit");
-        String startDate = scanner.nextLine();
+        String startDate = scanner.nextLine().trim();
         if(startDate.equalsIgnoreCase("x")) return;
         System.out.println("Enter end date(yyyy-MM-dd)(Optional): ");
-        String endDate = scanner.nextLine();
+        String endDate = scanner.nextLine().trim();
 
         if(!startDate.isEmpty() && !endDate.isEmpty()){
             LocalDate startDateParsed = parseDate(startDate);
@@ -359,11 +359,11 @@ public class FinancialTracker {
         }
 
         System.out.println("Enter description(Optional): ");
-        String description = scanner.nextLine();
+        String description = scanner.nextLine().trim();
         System.out.println("Enter vendor(Optional): ");
-        String vendor = scanner.nextLine();
+        String vendor = scanner.nextLine().trim();
         System.out.println("Enter the amount(Optional): ");
-        String amount = scanner.nextLine();
+        String amount = scanner.nextLine().trim();
         if(!description.isEmpty()) filterTransactionsByDescription(description, filteredList);
         if(!vendor.isEmpty()) filterTransactionsByVendor(vendor, filteredList);
         if(!amount.isEmpty()) filterTransactionsByAmount(amount, filteredList);
