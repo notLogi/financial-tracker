@@ -47,7 +47,7 @@ Follow these steps to get your application running within IntelliJ IDEA:
 - Java SDK 17
 - IntelliJ IDEA
 
-## Demo
+## Demo(Left to right, top to bottom)
 <img width="270" height="154" alt="image" src="https://github.com/user-attachments/assets/2af1bf41-7fa8-47f4-9283-e2410a73a4fa" />
 <img width="205" height="173" alt="image" src="https://github.com/user-attachments/assets/be531e23-fde3-4923-99ee-5c9160733e2e" />
 <img width="266" height="218" alt="image" src="https://github.com/user-attachments/assets/bfa8c333-e2d4-4297-8e83-6cba88949208" />
