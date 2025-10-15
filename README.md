@@ -3,7 +3,7 @@
 
 The Financial Tracker allows you to keep track of your previous transactions and allows the user to add deposits and payments. Transitions are stored onto a CSV file and can be filtered by dates, vendor, and the amount of money.
 
-## Features
+### Some features include:
 
 **Add Deposits and Payments**
 - Users are able to record the date of the deposit/payment, the amount deposited/paid, the vendor, and description of what it was for.
@@ -23,9 +23,6 @@ The Financial Tracker allows you to keep track of your previous transactions and
   **Sorting**
 - Transactions stored are automatically sorted by date for convenience.
 
-**Format**
-- All transactions are formatted in this way:
-- "yyyy-MM-dd|HH:mm:ss|description|vendor|amount"
 
 ## Setup
 
@@ -51,6 +48,8 @@ Follow these steps to get your application running within IntelliJ IDEA:
 - IntelliJ IDEA
 
 ## Demo
+https://github.com/user-attachments/assets/76582b37-0d14-4852-9e66-93cc27f21739
+
 
 ## An Interesting Part of My Code
 
