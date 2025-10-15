@@ -92,11 +92,10 @@ public class FinancialTracker {
                 LocalTime time = LocalTime.parse(token[1], TIME_FMT);
                 String description = token[2];
                 String vendor = token[3];
-                if(parseDouble(token[4]) != null){
-                    double amount = parseDouble(token[4]);
-                    transactions.add(new Transaction(date, time, description, vendor, amount));
+                Double convertedAmount = parseDouble(token[4]);
+                if(convertedAmount != null){
+                    transactions.add(new Transaction(date, time, description, vendor, convertedAmount));
                 }
-
                 sortTransactions();
             }
         }
@@ -327,10 +326,8 @@ public class FinancialTracker {
     }
 
     private static void filterTransactionsByAmount(String amount, ArrayList<Transaction> filteredList){
-        if(parseDouble(amount) != null){
-            double convertedAmount = parseDouble(amount);
-            customSearchFilter(transaction -> convertedAmount != transaction.getAmount(), filteredList);
-        }
+            Double convertedAmount = parseDouble(amount);
+            if(convertedAmount != null) customSearchFilter(transaction -> convertedAmount != transaction.getAmount(), filteredList);
     }
 
     private static void customSearchFilter(Predicate<Transaction> predicate, ArrayList<Transaction> filteredList){
@@ -396,6 +393,7 @@ public class FinancialTracker {
             return Math.round(Double.parseDouble(s) * 100.0) / 100.0;
         }
         catch(Exception ex){
+            System.err.println("Invalid number");
             return null;
         }
     }

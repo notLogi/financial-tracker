@@ -59,7 +59,7 @@ Include screenshots or GIFs that show your application in action. Use tools like
 
 
 - One of the interesting parts of my code is how I refactored the helper methods for the reportMenu and LedgerMenu. I looked up at how to pass a condition through the parameter and it taught me about Predicate. Predicate is a functional interface that allows this. I was able to reduce a lot of repetition with this trick.
-
+- Double vs double, where Double is an object. Used to check if the double was a valid number.
 ## Resources
 - https://www.geeksforgeeks.org/java/java-8-predicate-with-examples/
 
