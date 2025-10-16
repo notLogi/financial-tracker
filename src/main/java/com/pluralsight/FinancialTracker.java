@@ -156,19 +156,13 @@ public class FinancialTracker {
         String[] dateTimeSplit = dateAndTime.split(" ");
         LocalDate date = parseDate(dateTimeSplit[0]);
         LocalTime time = parseTime(dateTimeSplit[1]);
-        if(convertedAmount != null && date != null && time != null && !description.isEmpty() && !vendor.isEmpty()){
-            if(type.equalsIgnoreCase("deposit")){
-                transactions.add(new Transaction(date, time, capitalizeFirst(description), capitalizeFirst(vendor), convertedAmount));
-            }
-            else{
-                transactions.add(new Transaction(date, time, capitalizeFirst(description), capitalizeFirst(vendor), -(convertedAmount)));
-            }
-            System.out.println(type + " successful!");
-            sortTransactions();
+        if(convertedAmount == null || date == null || time == null || description.isEmpty() || vendor.isEmpty()) {
+            System.out.println("You did not fill in the vendor/description");
+            return;
         }
-        else{
-            System.err.println("You did not fill in the vendor/description");
-        }
+        transactions.add(new Transaction(date, time, capitalizeFirst(description), capitalizeFirst(vendor), convertedAmount));
+        System.out.println(type + " successful!");
+        sortTransactions();
     }
 
     /* ------------------------------------------------------------------
