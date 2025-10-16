@@ -307,15 +307,13 @@ public class FinancialTracker {
         Double lowestConvertedAmount = parseDouble(lowestAmount);
         Double highestConvertedAmount = parseDouble(highestAmount);
 
-        if(lowestConvertedAmount == null && highestConvertedAmount == null) return;
-
         if(lowestConvertedAmount != null && highestConvertedAmount != null){
             customSearchFilter(transaction -> lowestConvertedAmount <= Math.abs(transaction.getAmount()) && highestConvertedAmount >= Math.abs(transaction.getAmount()), filteredList);
         }
         else if(lowestConvertedAmount != null){
             customSearchFilter(transaction -> lowestConvertedAmount <= transaction.getAmount(), filteredList);
         }
-        else{
+        else if(highestConvertedAmount != null){
             customSearchFilter(transaction -> highestConvertedAmount >= transaction.getAmount(), filteredList);
         }
     }
