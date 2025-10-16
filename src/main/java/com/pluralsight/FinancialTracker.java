@@ -160,7 +160,8 @@ public class FinancialTracker {
             System.out.println("You did not fill in the vendor/description");
             return;
         }
-        transactions.add(new Transaction(date, time, capitalizeFirst(description), capitalizeFirst(vendor), convertedAmount));
+        double finalAmount = type.equalsIgnoreCase("deposit") ? convertedAmount : -(convertedAmount);
+        transactions.add(new Transaction(date, time, capitalizeFirst(description), capitalizeFirst(vendor), finalAmount));
         System.out.println(type + " successful!");
         sortTransactions();
     }
