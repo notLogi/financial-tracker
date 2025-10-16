@@ -136,7 +136,7 @@ public class FinancialTracker {
             System.err.println("Your date/time input is not correct or out of bound.");
         }
     }
-
+    //adding a transaction helper method.
     private static void recordTransaction(String type, Scanner scanner){
         System.out.println("Enter your information for a " + type + " : \nType \"X\" to return\n");
         System.out.println("Date and time(yyyy-MM-dd HH:mm:ss format): ");
@@ -395,6 +395,7 @@ public class FinancialTracker {
         }
     }
 
+    //capitalize the first letter of a word/sentence
     private static String capitalizeFirst(String text){
         if(text.isEmpty()) return text;
         return text.substring(0, 1).toUpperCase() + text.substring(1);
