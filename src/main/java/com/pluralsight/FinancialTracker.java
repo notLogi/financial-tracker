@@ -289,12 +289,12 @@ public class FinancialTracker {
         customSearchFilter(transaction -> (start == null || !transaction.getDate().isBefore(start)) && (end == null || !transaction.getDate().isAfter(end)), filteredList);
     }
 
-    private static void filterTransactionsByVendor(String vendor, ArrayList<Transaction> filteredList) {
-        customSearchFilter(transaction -> vendor.equalsIgnoreCase(transaction.getVendor()), filteredList);
+    private static void filterTransactionsByDescription(String description, ArrayList<Transaction> filteredList) {
+        customSearchFilter(transaction -> transaction.getDescription().toLowerCase().contains(description.toLowerCase()), filteredList);
     }
 
-    private static void filterTransactionsByDescription(String description, ArrayList<Transaction> filteredList) {
-        customSearchFilter(transaction -> description.equalsIgnoreCase(transaction.getDescription()), filteredList);
+    private static void filterTransactionsByVendor(String vendor, ArrayList<Transaction> filteredList) {
+        customSearchFilter(transaction -> transaction.getVendor().toLowerCase().contains(vendor.toLowerCase()), filteredList);
     }
 
     private static void filterTransactionsByAmount(String lowestAmount, String highestAmount, ArrayList<Transaction> filteredList){
