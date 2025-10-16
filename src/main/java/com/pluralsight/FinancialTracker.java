@@ -72,8 +72,6 @@ public class FinancialTracker {
         scanner.close();
     }
 
-
-
     /* ------------------------------------------------------------------
        File I/O
        ------------------------------------------------------------------ */
@@ -109,7 +107,6 @@ public class FinancialTracker {
             }
         }
     }
-
 
     //sorts all transactions by date
     private static void sortTransactions(){
@@ -175,7 +172,6 @@ public class FinancialTracker {
                 System.out.println("The amount you entered is negative");
                 return;
             }
-
             String[] dateTimeSplit = dateAndTime.split(" ");
             LocalDate date = LocalDate.parse(dateTimeSplit[0], DATE_FMT);
             LocalTime time = LocalTime.parse(dateTimeSplit[1], TIME_FMT);
@@ -219,6 +215,7 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
+
     private static void displayLedger() {
         filteredTransactions("You have no transactions recorded.", transaction -> true);
     }
@@ -308,30 +305,7 @@ public class FinancialTracker {
        ------------------------------------------------------------------ */
 
     private static void filterTransactionsByDate(LocalDate start, LocalDate end, ArrayList<Transaction> filteredList) {
-        if(end == null){
-            for(Transaction transaction : transactions){
-                LocalDate date = transaction.getDate();
-                if(date.isEqual(start) || date.isAfter(start)){
-                    filteredList.add(transaction);
-                }
-            }
-            return;
-        }
-        if(start == null){
-            for(Transaction transaction : transactions){
-                LocalDate date = transaction.getDate();
-                if(date.isEqual(end) || date.isBefore(end)){
-                    filteredList.add(transaction);
-                }
-            }
-            return;
-        }
-        for(Transaction transaction : transactions){
-            LocalDate date = transaction.getDate();
-            if((date.isEqual(start) || date.isAfter(start)) && (date.isEqual(end) || date.isBefore(end))){
-                filteredList.add(transaction);
-            }
-        }
+        customSearchFilter(transaction -> (start == null || !transaction.getDate().isBefore(start)) && (end == null || !transaction.getDate().isAfter(end)), filteredList);
     }
 
     private static void filterTransactionsByVendor(String vendor, ArrayList<Transaction> filteredList) {
@@ -342,9 +316,21 @@ public class FinancialTracker {
         customSearchFilter(transaction -> description.equalsIgnoreCase(transaction.getDescription()), filteredList);
     }
 
-    private static void filterTransactionsByAmount(String amount, ArrayList<Transaction> filteredList){
-            Double convertedAmount = parseDouble(amount);
-            if(convertedAmount != null) customSearchFilter(transaction -> convertedAmount != transaction.getAmount(), filteredList);
+    private static void filterTransactionsByAmount(String lowestAmount, String highestAmount, ArrayList<Transaction> filteredList){
+        Double lowestConvertedAmount = parseDouble(lowestAmount);
+        Double highestConvertedAmount = parseDouble(highestAmount);
+
+        if(lowestConvertedAmount == null && highestConvertedAmount == null) return;
+
+        if(lowestConvertedAmount != null && highestConvertedAmount != null){
+            customSearchFilter(transaction -> lowestConvertedAmount <= Math.abs(transaction.getAmount()) && highestConvertedAmount >= Math.abs(transaction.getAmount()), filteredList);
+        }
+        else if(lowestConvertedAmount != null){
+            customSearchFilter(transaction -> lowestConvertedAmount <= transaction.getAmount(), filteredList);
+        }
+        else{
+            customSearchFilter(transaction -> highestConvertedAmount >= transaction.getAmount(), filteredList);
+        }
     }
 
     private static void customSearchFilter(Predicate<Transaction> predicate, ArrayList<Transaction> filteredList){
@@ -377,11 +363,13 @@ public class FinancialTracker {
         String description = scanner.nextLine().trim();
         System.out.println("Enter vendor(Optional): ");
         String vendor = scanner.nextLine().trim();
-        System.out.println("Enter the amount(Optional): ");
-        String amount = scanner.nextLine().trim();
+        System.out.println("Enter the lowest amount(Optional): ");
+        String lowestAmount = scanner.nextLine().trim();
+        System.out.println("Enter the highest amount(Optional): ");
+        String highestAmount = scanner.nextLine().trim();
         if(!description.isEmpty()) filterTransactionsByDescription(description, filteredList);
         if(!vendor.isEmpty()) filterTransactionsByVendor(vendor, filteredList);
-        if(!amount.isEmpty()) filterTransactionsByAmount(amount, filteredList);
+        if(!lowestAmount.isEmpty() || !highestAmount.isEmpty()) filterTransactionsByAmount(lowestAmount, highestAmount, filteredList);
         if(!filteredList.isEmpty()){
             for(Transaction t : filteredList){
                 System.out.println(t.toString());
