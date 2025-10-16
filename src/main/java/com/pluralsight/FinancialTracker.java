@@ -62,8 +62,8 @@ public class FinancialTracker {
             sortTransactions();
             for(Transaction transaction : transactions){
                 LocalTime time = transaction.getTime();
-                String formattedTime = time.format(DateTimeFormatter.ofPattern(TIME_PATTERN));
-                writer.write(transaction.getDate() +  "|" +  formattedTime + "|" + transaction.getDescription() + "|" +  transaction.getVendor() + "|" + String.format("%.2f",transaction.getAmount()) + "\n");
+                String formattedTime = time.format(TIME_FMT);
+                writer.write(transaction.getDate() +  "|" +  formattedTime + "|" + transaction.getDescription() + "|" +  transaction.getVendor() + "|" + transaction.getAmount() + "\n");
             }
         }
         catch (IOException e) {
@@ -86,8 +86,8 @@ public class FinancialTracker {
             String input;
             while((input = reader.readLine()) != null){
                 String[] token = input.split("\\|");
-                LocalDate date = LocalDate.parse(token[0], DATE_FMT);
-                LocalTime time = LocalTime.parse(token[1], TIME_FMT);
+                LocalDate date = parseDate(token[0]);
+                LocalTime time = parseTime(token[1]);
                 String description = capitalizeFirst(token[2]);
                 String vendor = capitalizeFirst(token[3]);
                 Double convertedAmount = parseDouble(token[4]);
@@ -108,12 +108,6 @@ public class FinancialTracker {
         }
     }
 
-    //sorts all transactions by date
-    private static void sortTransactions(){
-        Comparator<Transaction> dateComparator = Comparator.comparing(Transaction::getDate);
-        transactions.sort(dateComparator);
-    }
-
     /**
      * Prompt for ONE date+time string in the format
      * "yyyy-MM-dd HH:mm:ss", plus description, vendor, amount.
@@ -122,28 +116,7 @@ public class FinancialTracker {
      */
     private static void addDeposit(Scanner scanner) {
         try{
-            System.out.println("Enter your information for a deposit: \nType \"X\" to return\n");
-            System.out.println("Date and time(yyyy-MM-dd HH:mm:ss format): ");
-            String dateAndTime = scanner.nextLine().trim();
-            if(dateAndTime.equalsIgnoreCase("X")) return;
-            System.out.println("Description: ");
-            String description = scanner.nextLine().trim();
-            System.out.println("Vendor: ");
-            String vendor = scanner.nextLine().trim();
-            System.out.println("Amount: ");
-            double amount = scanner.nextDouble();
-            scanner.nextLine();
-            if(amount <= 0) {
-                System.out.println("The amount you entered is negative");
-                return;
-            }
-            String[] dateTimeSplit = dateAndTime.split(" ");
-            LocalDate date = parseDate(dateTimeSplit[0]);
-            LocalTime time = LocalTime.parse(dateTimeSplit[1], TIME_FMT);
-
-            transactions.add(new Transaction(date, time, capitalizeFirst(description), capitalizeFirst(vendor), amount));
-            sortTransactions();
-            System.out.println("Deposit successful!");
+            recordTransaction("deposit", scanner);
         }
         catch (Exception e) {
             System.err.println("Your date/time input is not correct or out of bound.");
@@ -157,31 +130,44 @@ public class FinancialTracker {
      */
     private static void addPayment(Scanner scanner) {
         try{
-            System.out.println("Enter your information for a payment: \nType \"X\" to return\n");
-            System.out.println("Date and time(yyyy-MM-dd HH:mm:ss format): ");
-            String dateAndTime = scanner.nextLine().trim();
-            if(dateAndTime.equalsIgnoreCase("X")) return;
-            System.out.println("Description: ");
-            String description = scanner.nextLine().trim();
-            System.out.println("Vendor: ");
-            String vendor = scanner.nextLine().trim();
-            System.out.println("Amount you want to pay(Positive number): ");
-            double amount = scanner.nextDouble();
-            scanner.nextLine();
-            if(amount <= 0) {
-                System.out.println("The amount you entered is negative");
-                return;
-            }
-            String[] dateTimeSplit = dateAndTime.split(" ");
-            LocalDate date = LocalDate.parse(dateTimeSplit[0], DATE_FMT);
-            LocalTime time = LocalTime.parse(dateTimeSplit[1], TIME_FMT);
-
-            transactions.add(new Transaction(date, time, capitalizeFirst(description), capitalizeFirst(vendor), -(amount)));
-            sortTransactions();
-            System.out.println("Payment successful!");
+            recordTransaction("payment", scanner);
         }
         catch (Exception e) {
             System.err.println("Your date/time input is not correct or out of bound.");
+        }
+    }
+
+    private static void recordTransaction(String type, Scanner scanner){
+        System.out.println("Enter your information for a " + type + " : \nType \"X\" to return\n");
+        System.out.println("Date and time(yyyy-MM-dd HH:mm:ss format): ");
+        String dateAndTime = scanner.nextLine().trim();
+        if(dateAndTime.equalsIgnoreCase("X")) return;
+        System.out.println("Description: ");
+        String description = scanner.nextLine().trim();
+        System.out.println("Vendor: ");
+        String vendor = scanner.nextLine().trim();
+        System.out.println("Amount you want to pay(Positive number): ");
+        String amount = scanner.nextLine().trim();
+        Double convertedAmount = parseDouble(amount);
+        if(convertedAmount != null && convertedAmount <= 0) {
+            System.err.println("The amount you entered is negative");
+            return;
+        }
+        String[] dateTimeSplit = dateAndTime.split(" ");
+        LocalDate date = parseDate(dateTimeSplit[0]);
+        LocalTime time = parseTime(dateTimeSplit[1]);
+        if(convertedAmount != null && date != null && time != null && !description.isEmpty() && !vendor.isEmpty()){
+            if(type.equalsIgnoreCase("deposit")){
+                transactions.add(new Transaction(date, time, capitalizeFirst(description), capitalizeFirst(vendor), convertedAmount));
+            }
+            else{
+                transactions.add(new Transaction(date, time, capitalizeFirst(description), capitalizeFirst(vendor), -(convertedAmount)));
+            }
+            System.out.println(type + " successful!");
+            sortTransactions();
+        }
+        else{
+            System.err.println("You did not fill in the vendor/description");
         }
     }
 
@@ -393,6 +379,16 @@ public class FinancialTracker {
             return null;
         }
     }
+    private static LocalTime parseTime(String s) {
+        try{
+            return LocalTime.parse(s, TIME_FMT);
+        } catch (Exception e) {
+            if(!s.isEmpty()){
+                System.err.println("Invalid time format");
+            }
+            return null;
+        }
+    }
 
     private static Double parseDouble(String s) {
         try {
@@ -407,5 +403,11 @@ public class FinancialTracker {
     private static String capitalizeFirst(String text){
         if(text.isEmpty()) return text;
         return text.substring(0, 1).toUpperCase() + text.substring(1);
+    }
+
+    //sorts all transactions by date
+    private static void sortTransactions(){
+        Comparator<Transaction> dateComparator = Comparator.comparing(Transaction::getDate);
+        transactions.sort(dateComparator);
     }
 }

@@ -1,7 +1,6 @@
 package com.pluralsight;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Transaction {
@@ -52,11 +51,11 @@ public class Transaction {
     @Override
     public String toString() {
         return "Transaction: {"+
-                "date: " + date +
-                ", time: " + time +
-                ", description: " + description  +
-                ", vendor: " + vendor  +
-                ", amount: " + String.format("%.2f", amount) +
+                "date: " + getDate() +
+                ", time: " + getTime() +
+                ", description: " + getDescription()  +
+                ", vendor: " + getVendor()  +
+                ", amount: " + getAmount() +
                 '}' + "\n";
     }
 }
