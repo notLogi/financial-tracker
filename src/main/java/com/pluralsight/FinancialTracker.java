@@ -270,6 +270,13 @@ public class FinancialTracker {
         filteredTransactions("No vendors matched any transactions", transaction -> vendor.equalsIgnoreCase(transaction.getVendor()));
     }
 
+    /**
+     *
+     * @param message is the
+     * @param predicate can be thought of a "subpackage". It is part of java. It allows you to pass a condition as an argument. With that, for every primitive/nonprimitive
+     *                  type you want to check with a condition, you do predicate.test(variable). This returns a boolean true or false.
+     *                  You can also have 2 predicates and can check and/or by condition1.and(condition2).test(value)
+     */
     private static void filteredTransactions(String message, Predicate<Transaction> predicate){
         boolean found = false;
         for(Transaction transaction : transactions){
@@ -290,11 +297,11 @@ public class FinancialTracker {
     }
 
     private static void filterTransactionsByDescription(String description, ArrayList<Transaction> filteredList) {
-        customSearchFilter(transaction -> transaction.getDescription().toLowerCase().contains(description.toLowerCase()), filteredList);
+        customSearchFilter(transaction -> description.equalsIgnoreCase(transaction.getDescription()), filteredList);
     }
 
     private static void filterTransactionsByVendor(String vendor, ArrayList<Transaction> filteredList) {
-        customSearchFilter(transaction -> transaction.getVendor().toLowerCase().contains(vendor.toLowerCase()), filteredList);
+        customSearchFilter(transaction -> vendor.equalsIgnoreCase(transaction.getVendor()), filteredList);
     }
 
     private static void filterTransactionsByAmount(String lowestAmount, String highestAmount, ArrayList<Transaction> filteredList){
@@ -314,6 +321,11 @@ public class FinancialTracker {
         }
     }
 
+    /**
+     *
+    removeIf is "another" way of removing elements from an arrayList. The logic here is since it is iterating through the list and removing it, some elements might be skipped.
+     IntelliJ suggested this change. You can also grab the negation(!) by writing negate() before test(value)
+     */
     private static void customSearchFilter(Predicate<Transaction> predicate, ArrayList<Transaction> filteredList){
         if(!filteredList.isEmpty()){
             filteredList.removeIf(transaction -> predicate.negate().test(transaction));
@@ -326,6 +338,10 @@ public class FinancialTracker {
         }
     }
 
+    /**
+     *
+     * custom search menu
+     */
     private static void customSearch(Scanner scanner) {
         ArrayList<Transaction> filteredList = new ArrayList<>();
         System.out.println("Enter your custom search: ");

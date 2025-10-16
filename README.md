@@ -3,6 +3,13 @@
 
 The Financial Tracker allows you to keep track of your previous transactions and allows the user to add deposits and payments. Transitions are stored onto a CSV file and can be filtered by dates, vendor, and the amount of money.
 
+
+## User stories
+- As a user, I want to filter out transactions by date, vendor, description, and the amount deposited/paid.
+- As a user, I want to be able to add deposits, so I can keep track of spending.
+- As a user, I want to be able to add payments, so I can keep track of my debt repayment.
+- As a user, I want to see a list of options, so I can choose what to do on the application.
+- As a user, I want to open all transactions, so I can see calculate the amount of money I have spent.
 ### Some features include:
 
 **Add Deposits and Payments**
