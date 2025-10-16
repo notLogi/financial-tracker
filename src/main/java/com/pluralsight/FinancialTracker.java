@@ -59,7 +59,6 @@ public class FinancialTracker {
             }
         }
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))){
-            sortTransactions();
             for(Transaction transaction : transactions){
                 LocalTime time = transaction.getTime();
                 String formattedTime = time.format(TIME_FMT);
